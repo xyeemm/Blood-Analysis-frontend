@@ -1,0 +1,280 @@
+import { motion } from 'framer-motion'
+import { ChevronDown, Plus, Trash2, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '../ui/button'
+import { Card } from '../ui/card'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '../ui/select'
+
+interface Test {
+	test_name: string
+	value: string
+	unit: string
+}
+
+const COMMON_TESTS = [
+	{ name: 'Hemoglobin', unit: 'g/dL' },
+	{ name: 'White Blood Cells', unit: 'cells/mcL' },
+	{ name: 'Red Blood Cells', unit: 'million cells/mcL' },
+	{ name: 'Platelets', unit: 'cells/mcL' },
+	{ name: 'Hematocrit', unit: '%' },
+	{ name: 'Glucose', unit: 'mg/dL' },
+	{ name: 'Cholesterol', unit: 'mg/dL' },
+]
+
+const LeftSide = () => {
+	const [historyOpen, setHistoryOpen] = useState(false)
+	const [tests, setTests] = useState<Test[]>([
+		{ test_name: '', value: '', unit: '' },
+	])
+	const [loading, setLoading] = useState(false)
+
+	const updateTest = (index: number, field: keyof Test, value: string) => {
+		const newTests = [...tests]
+		newTests[index][field] = value
+		setTests(newTests)
+	}
+
+	const addTest = () => {
+		setTests([...tests, { test_name: '', value: '', unit: '' }])
+	}
+
+	const removeTest = (index: number) => {
+		setTests(tests.filter((_, i) => i !== index))
+	}
+
+	// 🔹 API Submit Handler
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+
+		const hasEmpty = tests.some((t) => !t.test_name || !t.value)
+		if (hasEmpty) {
+			toast.error('Please fill in all test names and values before analyzing')
+			return
+		}
+
+		setLoading(true)
+		try {
+			await fetch('/api/analyze-report', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ tests }),
+			})
+			toast.success('Report analyzed successfully!')
+		} catch (err) {
+			toast.error('Something went wrong. Please try again.')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	return (
+		<div>
+			{/* Test_Input_Form Card*/}
+			<Card className='p-3 shadow-md'>
+				{/* onSubmit={} */}
+				<form className='space-y-6' onSubmit={handleSubmit}>
+					<div className='space-y-4'>
+						{tests.map((test, index) => (
+							<motion.div
+								key={index}
+								initial={{ opacity: 0, x: -20 }}
+								animate={{ opacity: 1, x: 0 }}
+								className='grid grid-cols-1 md:grid-cols-12 gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200'
+							>
+								<div className='md:col-span-5'>
+									<Label className='text-sm text-slate-600 mb-1 block'>
+										Test Name
+									</Label>
+									<Select
+										value={test.test_name}
+										onValueChange={(value) => {
+											const selectedTest = COMMON_TESTS.find(
+												(t) => t.name === value,
+											)
+											updateTest(index, 'test_name', value)
+											if (selectedTest) {
+												updateTest(index, 'unit', selectedTest.unit)
+											}
+										}}
+									>
+										<SelectTrigger
+											className='bg-white border-slate-200 focus:border-emerald-500 rounded-lg'
+											data-testid={`test-name-input-${index}`}
+										>
+											<SelectValue placeholder='e.g., Hemoglobin' />
+										</SelectTrigger>
+										<SelectContent>
+											{COMMON_TESTS.map((t) => (
+												<SelectItem key={t.name} value={t.name}>
+													{t.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</div>
+								<div className='md:col-span-3'>
+									<Label className='text-sm text-slate-600 mb-1 block'>
+										Value
+									</Label>
+									<Input
+										type='number'
+										step='0.01'
+										placeholder='0.0'
+										value={test.value}
+										onChange={(e) => updateTest(index, 'value', e.target.value)}
+										className='bg-white border-slate-200 focus:border-emerald-500 rounded-lg'
+										data-testid={`test-value-input-${index}`}
+									/>
+								</div>
+								<div className='md:col-span-3'>
+									<Label className='text-sm text-slate-600 mb-1 block'>
+										Unit
+									</Label>
+									<Input
+										disabled
+										placeholder='unit'
+										value={test.unit}
+										onChange={(e) => updateTest(index, 'unit', e.target.value)}
+										className=' border-slate-200 w-32 focus:border-emerald-500 rounded-lg'
+										data-testid={`test-unit-input-${index}`}
+									/>
+								</div>
+								<div className='md:col-span-1 flex items-end'>
+									{tests.length > 1 && (
+										<Button
+											type='button'
+											variant='ghost'
+											size='icon'
+											onClick={() => removeTest(index)}
+											className='text-red-600 hover:bg-red-50'
+											data-testid={`remove-test-button-${index}`}
+										>
+											<Trash2 className='w-4 h-4' />
+										</Button>
+									)}
+								</div>
+							</motion.div>
+						))}
+					</div>
+
+					<div className='flex gap-4'>
+						<Button
+							type='button'
+							variant='outline'
+							onClick={addTest}
+							className='rounded-full border-emerald-200 hover:bg-emerald-50'
+							data-testid='add-test-button'
+						>
+							<Plus className='w-4 h-4 mr-2' />
+							Add Another Test
+						</Button>
+					</div>
+
+					<Button
+						type='submit'
+						disabled={loading}
+						className='w-full bg-emerald-700 hover:bg-emerald-800 text-white shadow-lg shadow-emerald-900/20 rounded-full px-8 py-3 font-medium transition-all hover:-translate-y-0.5'
+						data-testid='analyze-button'
+					>
+						{loading ? (
+							<span className='flex items-center gap-2'>
+								<TrendingUp className='w-5 h-5 animate-pulse' />
+								Analyzing...
+							</span>
+						) : (
+							<span className='flex items-center gap-2'>
+								<TrendingUp className='w-5 h-5' />
+								Analyze Blood Report
+							</span>
+						)}
+					</Button>
+				</form>
+			</Card>
+
+			{/* Report History Card */}
+			<Card className='p-6 mt-8 shadow-md'>
+				<div
+					className='mb-4 flex justify-between items-center cursor-pointer'
+					onClick={() => setHistoryOpen(!historyOpen)}
+				>
+					<div>
+						<h3 className='text-lg font-semibold text-slate-800'>
+							Report History
+						</h3>
+						<p className='text-sm text-slate-500'>
+							View your past blood report analysis
+						</p>
+					</div>
+					<ChevronDown
+						className={`w-5 h-5 text-slate-500 transition-transform ${
+							historyOpen ? 'rotate-180' : ''
+						}`}
+					/>
+				</div>
+				{historyOpen && (
+					<div className='space-y-3'>
+						{(() => {
+							const reports = [
+								{ id: 1, date: '2024-01-15', tests: 5, status: 'Normal' },
+								{
+									id: 2,
+									date: '2023-12-20',
+									tests: 3,
+									status: 'Attention Required',
+								},
+								{ id: 3, date: '2023-11-10', tests: 7, status: 'Normal' },
+							]
+							if (reports.length < 1) {
+								return (
+									<div className='p-4 bg-slate-50 rounded-lg border border-slate-200 text-center'>
+										<p className='text-sm text-slate-500'>
+											No previous reports found
+										</p>
+										<p className='text-xs text-slate-400 mt-1'>
+											Your analyzed reports will appear here
+										</p>
+									</div>
+								)
+							}
+							return reports.map((report) => (
+								<div
+									key={report.id}
+									className='p-4 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center hover:bg-slate-100 cursor-pointer transition-colors'
+								>
+									<div>
+										<p className='text-sm font-medium text-slate-700'>
+											{report.date}
+										</p>
+										<p className='text-xs text-slate-500'>
+											{report.tests} tests analyzed
+										</p>
+									</div>
+									<span
+										className={`text-xs px-2 py-1 rounded-full ${
+											report.status === 'Normal'
+												? 'bg-emerald-100 text-emerald-700'
+												: 'bg-amber-100 text-amber-700'
+										}`}
+									>
+										{report.status}
+									</span>
+								</div>
+							))
+						})()}
+					</div>
+				)}
+			</Card>
+		</div>
+	)
+}
+
+export default LeftSide
