@@ -15,7 +15,7 @@ import {
 } from '../ui/select'
 
 interface Test {
-	test_name: string
+	testName: string
 	value: string
 	unit: string
 }
@@ -30,10 +30,14 @@ const COMMON_TESTS = [
 	{ name: 'Cholesterol', unit: 'mg/dL' },
 ]
 
-const LeftSide = () => {
-	const [historyOpen, setHistoryOpen] = useState(false)
+const LeftSide = ({
+	onAnalysisComplete,
+}: {
+	onAnalysisComplete: (data: any[]) => void
+}) => {
+	const [historyOpen, setHistoryOpen] = useState(true)
 	const [tests, setTests] = useState<Test[]>([
-		{ test_name: '', value: '', unit: '' },
+		{ testName: '', value: '', unit: '' },
 	])
 	const [loading, setLoading] = useState(false)
 
@@ -44,7 +48,7 @@ const LeftSide = () => {
 	}
 
 	const addTest = () => {
-		setTests([...tests, { test_name: '', value: '', unit: '' }])
+		setTests([...tests, { testName: '', value: '', unit: '' }])
 	}
 
 	const removeTest = (index: number) => {
@@ -55,7 +59,7 @@ const LeftSide = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 
-		const hasEmpty = tests.some((t) => !t.test_name || !t.value)
+		const hasEmpty = tests.some((t) => !t.testName || !t.value)
 		if (hasEmpty) {
 			toast.error('Please fill in all test names and values before analyzing')
 			return
@@ -63,14 +67,33 @@ const LeftSide = () => {
 
 		setLoading(true)
 		try {
-			await fetch('/api/analyze-report', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ tests }),
-			})
+			// We map over each test and send an individual request to match your controller
+			const requests = tests.map((test) =>
+				fetch('http://localhost:5000/api/checkBloodTest', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						testName: test.testName,
+						value: parseFloat(test.value), // Convert string to number for backend
+						unit: test.unit,
+					}),
+				}).then(async (res) => {
+					if (!res.ok) {
+						const errorData = await res.json()
+						throw new Error(errorData.message || 'Failed to analyze')
+					}
+					return res.json()
+				}),
+			)
+
+			const results = await Promise.all(requests)
+			// Extract the 'data' property from each API response
+			const formattedResults = results.map((r) => r.data)
+			onAnalysisComplete(formattedResults)
+			console.log('Analysis Results:', results)
 			toast.success('Report analyzed successfully!')
-		} catch (err) {
-			toast.error('Something went wrong. Please try again.')
+		} catch (err: any) {
+			toast.error(err.message || 'Something went wrong.')
 		} finally {
 			setLoading(false)
 		}
@@ -95,12 +118,12 @@ const LeftSide = () => {
 										Test Name
 									</Label>
 									<Select
-										value={test.test_name}
+										value={test.testName}
 										onValueChange={(value) => {
 											const selectedTest = COMMON_TESTS.find(
 												(t) => t.name === value,
 											)
-											updateTest(index, 'test_name', value)
+											updateTest(index, 'testName', value)
 											if (selectedTest) {
 												updateTest(index, 'unit', selectedTest.unit)
 											}

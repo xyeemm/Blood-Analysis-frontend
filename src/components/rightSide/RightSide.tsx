@@ -37,7 +37,15 @@ const report = {
 	],
 }
 
-const RightSide = () => {
+const RightSide = ({ results }: { results: any[] }) => {
+	// If no results yet, show a placeholder
+	if (results.length === 0) {
+		return (
+			<Card className='p-6 text-center text-slate-500'>
+				Submit a test to see analysis
+			</Card>
+		)
+	}
 	return (
 		<div className='space-y-6'>
 			{/* Report Header */}
@@ -49,7 +57,9 @@ const RightSide = () => {
 						<h2 className='text-xl font-semibold text-slate-800'>
 							AI Blood Report Analysis
 						</h2>
-						<p className='text-sm text-slate-500'>Generated on {report.date}</p>
+						{results.length > 0 && results[0].checkedAt && (
+							<p className='text-sm text-slate-500'>Generated on {new Date(results[0].checkedAt).toISOString().split('T')[0]}</p>
+						)}
 					</div>
 
 					{/* <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full text-sm">
@@ -62,7 +72,7 @@ const RightSide = () => {
 				</h3>
 
 				<div className='space-y-4'>
-					{report.tests.map((test, index) => (
+					{results.map((test, index) => (
 						<motion.div
 							key={index}
 							initial={{ opacity: 0, y: 10 }}
@@ -70,9 +80,10 @@ const RightSide = () => {
 							className='p-4 rounded-lg border border-slate-200 bg-slate-50 flex justify-between items-center'
 						>
 							<div>
-								<p className='font-medium text-slate-700'>{test.name}</p>
+								<p className='font-medium text-slate-700'>{test.testName}</p>
 								<p className='text-xs text-slate-500'>
-									Normal Range: {test.normal} {test.unit}
+									Normal Range: {test.normalRange.min} - {test.normalRange.max}{' '}
+									{test.unit}
 								</p>
 							</div>
 
