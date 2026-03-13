@@ -6,7 +6,10 @@ const Layout = () => {
 		<div>
 			<header>
 				<div className='sticky flex justify-end px-5 py-2.5 bg-white shadow-md'>
-					<span>Powered by ChatGPT</span>
+					{/* <span>Powered by ChatGPT</span> */}
+					<span className='bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent'>
+						✨ AI-Powered
+					</span>
 				</div>
 			</header>
 			<div>
