@@ -79,27 +79,24 @@ const LeftSide = ({
 				payload,
 			)
 			console.log(response.data)
-			// We map over each test and send an individual request to match your controller
-			// const requests = tests.map((test) =>
-			// 	axios.post('http://localhost:5000/api/checkBloodTest', {
-			// 		testName: test.testName,
-			// 		value: parseFloat(test.value), // Convert string to number for backend
-			// 		unit: test.unit,
-			// 	}),
-			// )
+			// Extracting results
+			const results = response.data
 
-			// const results = await Promise.all(requests)
-			// // Extract the 'data' property from each API response
-			// const formattedResults = results.map((r) => r.data)
-			// onAnalysisComplete(formattedResults)
-			// console.log('Analysis Results:', results)
-			// // Get existing results and append new ones instead of replacing
-			// const existingResults = localStorage.getItem('bloodTestResults')
-			// const existingArray = existingResults ? JSON.parse(existingResults) : []
-			// const updatedResults = [...existingArray, ...formattedResults]
-			// localStorage.setItem('bloodTestResults', JSON.stringify(updatedResults))
+			// Get existing results from localStorage
+			const existingResults = localStorage.getItem('bloodTestResults')
+			const existingArray = existingResults ? JSON.parse(existingResults) : []
 
-			// toast.success('Report analyzed successfully!')
+			// Append new results
+			const updatedResults = [...existingArray, ...results]
+
+			// Store back in localStorage
+			localStorage.setItem('bloodTestResults', JSON.stringify(updatedResults))
+
+			console.log('Stored in localStorage:', updatedResults)
+
+
+
+			toast.success('Report analyzed successfully!')
 		} catch (err: any) {
 			toast.error(err.message || 'Something went wrong.')
 		} finally {
