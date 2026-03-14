@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { motion } from 'framer-motion'
 import { ChevronDown, Plus, Trash2, TrendingUp } from 'lucide-react'
 import { useState } from 'react'
@@ -67,40 +68,38 @@ const LeftSide = ({
 
 		setLoading(true)
 		try {
-			// Send each test individually and collect results
-			const allResults: any[] = []
-			
-			for (const test of tests) {
-				const response = await fetch('http://localhost:5000/api/checkBloodTest', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						testName: test.testName,
-						value: parseFloat(test.value),
-						unit: test.unit,
-					}),
-				})
+			// Transform before sending
+			const payload = tests.map((t) => ({
+				testName: t.testName,
+				value: parseFloat(t.value), // convert string to number
+				unit: t.unit,
+			}))
+			const response = await axios.post(
+				'http://localhost:5000/api/checkBloodTest',
+				payload,
+			)
+			console.log(response.data)
+			// We map over each test and send an individual request to match your controller
+			// const requests = tests.map((test) =>
+			// 	axios.post('http://localhost:5000/api/checkBloodTest', {
+			// 		testName: test.testName,
+			// 		value: parseFloat(test.value), // Convert string to number for backend
+			// 		unit: test.unit,
+			// 	}),
+			// )
 
-				if (!response.ok) {
-					const errorData = await response.json()
-					throw new Error(errorData.message || 'Failed to analyze')
-				}
+			// const results = await Promise.all(requests)
+			// // Extract the 'data' property from each API response
+			// const formattedResults = results.map((r) => r.data)
+			// onAnalysisComplete(formattedResults)
+			// console.log('Analysis Results:', results)
+			// // Get existing results and append new ones instead of replacing
+			// const existingResults = localStorage.getItem('bloodTestResults')
+			// const existingArray = existingResults ? JSON.parse(existingResults) : []
+			// const updatedResults = [...existingArray, ...formattedResults]
+			// localStorage.setItem('bloodTestResults', JSON.stringify(updatedResults))
 
-				const result = await response.json()
-				const formattedResult = result.data
-				allResults.push(formattedResult)
-			}
-
-			onAnalysisComplete(allResults)
-			console.log('Analysis Results:', allResults)
-
-			// Get existing results and append new ones instead of replacing
-			const existingResults = localStorage.getItem('bloodTestResults')
-			const existingArray = existingResults ? JSON.parse(existingResults) : []
-			const updatedResults = [...existingArray, ...allResults]
-			localStorage.setItem('bloodTestResults', JSON.stringify(updatedResults))
-
-			toast.success('Report analyzed successfully!')
+			// toast.success('Report analyzed successfully!')
 		} catch (err: any) {
 			toast.error(err.message || 'Something went wrong.')
 		} finally {
@@ -325,7 +324,8 @@ const LeftSide = ({
 										<div>
 											<span className='text-slate-600'>Normal: </span>
 											<span className='font-medium text-slate-800'>
-												{report.normalRange?.min} - {report.normalRange?.max} {report.unit}
+												{report.normalRange?.min} - {report.normalRange?.max}{' '}
+												{report.unit}
 											</span>
 										</div>
 									</div>
