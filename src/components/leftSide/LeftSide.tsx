@@ -91,6 +91,8 @@ const LeftSide = ({
 			const formattedResults = results.map((r) => r.data)
 			onAnalysisComplete(formattedResults)
 			console.log('Analysis Results:', results)
+			localStorage.setItem('bloodTestResults', JSON.stringify(formattedResults))
+
 			toast.success('Report analyzed successfully!')
 		} catch (err: any) {
 			toast.error(err.message || 'Something went wrong.')
@@ -98,6 +100,8 @@ const LeftSide = ({
 			setLoading(false)
 		}
 	}
+	const storedResult = localStorage.getItem('bloodTestResults')
+	const storedResultArray = storedResult ? JSON.parse(storedResult) : []
 
 	return (
 		<div>
@@ -246,17 +250,7 @@ const LeftSide = ({
 				{historyOpen && (
 					<div className='space-y-3'>
 						{(() => {
-							const reports = [
-								{ id: 1, date: '2024-01-15', tests: 5, status: 'Normal' },
-								{
-									id: 2,
-									date: '2023-12-20',
-									tests: 3,
-									status: 'Attention Required',
-								},
-								{ id: 3, date: '2023-11-10', tests: 7, status: 'Normal' },
-							]
-							if (reports.length < 1) {
+							if (!storedResultArray || storedResultArray.length === 0) {
 								return (
 									<div className='p-4 bg-slate-50 rounded-lg border border-slate-200 text-center'>
 										<p className='text-sm text-slate-500'>
@@ -268,17 +262,19 @@ const LeftSide = ({
 									</div>
 								)
 							}
-							return reports.map((report) => (
+							return storedResultArray.map((report: any, index: number) => (
 								<div
-									key={report.id}
+									key={index}
 									className='p-4 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center hover:bg-slate-100 cursor-pointer transition-colors'
 								>
 									<div>
 										<p className='text-sm font-medium text-slate-700'>
-											{report.date}
+											{report.checkedAt
+												? `Checked on ${new Date(report.checkedAt).toISOString().split('T')[0]}`
+												: 'Unknown Date'}
 										</p>
 										<p className='text-xs text-slate-500'>
-											{report.tests} tests analyzed
+											{report.testName} test analyzed
 										</p>
 									</div>
 									<span
