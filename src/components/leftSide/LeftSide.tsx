@@ -31,15 +31,9 @@ const COMMON_TESTS = [
 	{ name: 'Cholesterol', unit: 'mg/dL' },
 ]
 
-const LeftSide = ({
-	onAnalysisComplete,
-}: {
-	onAnalysisComplete: (data: any[]) => void
-}) => {
+const LeftSide = ({onAnalysisComplete,}: {onAnalysisComplete: (data: any[]) => void}) => {
 	const [historyOpen, setHistoryOpen] = useState(true)
-	const [tests, setTests] = useState<Test[]>([
-		{ testName: '', value: '', unit: '' },
-	])
+	const [tests, setTests] = useState<Test[]>([{ testName: '', value: '', unit: '' },])
 	const [loading, setLoading] = useState(false)
 
 	const updateTest = (index: number, field: keyof Test, value: string) => {
@@ -80,21 +74,21 @@ const LeftSide = ({
 			)
 			console.log(response.data)
 			// Extracting results
-			const results = response.data
+			const dataFromAPI = response.data
+			    // 🔹 Send it to parent
+    		onAnalysisComplete(Array.isArray(dataFromAPI) ? dataFromAPI : [dataFromAPI]);
 
+			// LOCAL STORAGE LOGIC
 			// Get existing results from localStorage
 			const existingResults = localStorage.getItem('bloodTestResults')
 			const existingArray = existingResults ? JSON.parse(existingResults) : []
-
 			// Append new results
-			const updatedResults = [...existingArray, ...results]
+			const updatedResults = [...existingArray, ...dataFromAPI]
 
 			// Store back in localStorage
 			localStorage.setItem('bloodTestResults', JSON.stringify(updatedResults))
 
 			console.log('Stored in localStorage:', updatedResults)
-
-
 
 			toast.success('Report analyzed successfully!')
 		} catch (err: any) {
