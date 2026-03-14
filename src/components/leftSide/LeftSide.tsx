@@ -265,27 +265,43 @@ const LeftSide = ({
 							return storedResultArray.map((report: any, index: number) => (
 								<div
 									key={index}
-									className='p-4 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center hover:bg-slate-100 cursor-pointer transition-colors'
+									className='p-4 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 cursor-pointer transition-colors'
 								>
-									<div>
-										<p className='text-sm font-medium text-slate-700'>
-											{report.checkedAt
-												? `Checked on ${new Date(report.checkedAt).toISOString().split('T')[0]}`
-												: 'Unknown Date'}
-										</p>
-										<p className='text-xs text-slate-500'>
-											{report.testName} test analyzed
-										</p>
+									<div className='flex justify-between items-start mb-2'>
+										<div>
+											<p className='text-sm font-medium text-slate-700'>
+												{report.testName}
+											</p>
+											<p className='text-xs text-slate-500'>
+												{report.checkedAt
+													? new Date(report.checkedAt).toLocaleDateString()
+													: 'Unknown Date'}
+											</p>
+										</div>
+										<span
+											className={`text-xs px-2 py-1 rounded-full ${
+												report.status === 'normal'
+													? 'bg-emerald-100 text-emerald-700'
+													: 'bg-amber-100 text-amber-700'
+											}`}
+										>
+											{report.status}
+										</span>
 									</div>
-									<span
-										className={`text-xs px-2 py-1 rounded-full ${
-											report.status === 'Normal'
-												? 'bg-emerald-100 text-emerald-700'
-												: 'bg-amber-100 text-amber-700'
-										}`}
-									>
-										{report.status}
-									</span>
+									<div className='flex justify-between items-center mt-2 text-sm'>
+										<div>
+											<span className='text-slate-600'>Value: </span>
+											<span className='font-medium text-slate-800'>
+												{report.value} {report.unit}
+											</span>
+										</div>
+										<div>
+											<span className='text-slate-600'>Normal: </span>
+											<span className='font-medium text-slate-800'>
+												{report.normalRange?.min} - {report.normalRange?.max} {report.unit}
+											</span>
+										</div>
+									</div>
 								</div>
 							))
 						})()}
