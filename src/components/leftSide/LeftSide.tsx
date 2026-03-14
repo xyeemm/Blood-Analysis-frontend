@@ -91,7 +91,11 @@ const LeftSide = ({
 			const formattedResults = results.map((r) => r.data)
 			onAnalysisComplete(formattedResults)
 			console.log('Analysis Results:', results)
-			localStorage.setItem('bloodTestResults', JSON.stringify(formattedResults))
+			// Get existing results and append new ones instead of replacing
+			const existingResults = localStorage.getItem('bloodTestResults')
+			const existingArray = existingResults ? JSON.parse(existingResults) : []
+			const updatedResults = [...existingArray, ...formattedResults]
+			localStorage.setItem('bloodTestResults', JSON.stringify(updatedResults))
 
 			toast.success('Report analyzed successfully!')
 		} catch (err: any) {
@@ -249,25 +253,6 @@ const LeftSide = ({
 				</div>
 				{historyOpen && (
 					<div className='space-y-3'>
-						{storedResultArray && storedResultArray.length > 0 && (
-							<div className='flex justify-end mb-2'>
-								<Button
-									type='button'
-									variant='outline'
-									size='sm'
-									onClick={() => {
-										localStorage.removeItem('bloodTestResults')
-										toast.success('History cleared successfully!')
-										window.location.reload()
-									}}
-									className='text-red-600 border-red-200 hover:bg-red-50'
-									data-testid='clear-history-button'
-								>
-									<Trash2 className='w-4 h-4 mr-2' />
-									Clear History
-								</Button>
-							</div>
-						)}
 						{(() => {
 							if (!storedResultArray || storedResultArray.length === 0) {
 								return (
