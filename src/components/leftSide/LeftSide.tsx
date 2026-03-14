@@ -67,34 +67,37 @@ const LeftSide = ({
 
 		setLoading(true)
 		try {
-			// We map over each test and send an individual request to match your controller
-			const requests = tests.map((test) =>
-				fetch('http://localhost:5000/api/checkBloodTest', {
+			// Send each test individually and collect results
+			const allResults: any[] = []
+			
+			for (const test of tests) {
+				const response = await fetch('http://localhost:5000/api/checkBloodTest', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
 						testName: test.testName,
-						value: parseFloat(test.value), // Convert string to number for backend
+						value: parseFloat(test.value),
 						unit: test.unit,
 					}),
-				}).then(async (res) => {
-					if (!res.ok) {
-						const errorData = await res.json()
-						throw new Error(errorData.message || 'Failed to analyze')
-					}
-					return res.json()
-				}),
-			)
+				})
 
-			const results = await Promise.all(requests)
-			// Extract the 'data' property from each API response
-			const formattedResults = results.map((r) => r.data)
-			onAnalysisComplete(formattedResults)
-			console.log('Analysis Results:', results)
+				if (!response.ok) {
+					const errorData = await response.json()
+					throw new Error(errorData.message || 'Failed to analyze')
+				}
+
+				const result = await response.json()
+				const formattedResult = result.data
+				allResults.push(formattedResult)
+			}
+
+			onAnalysisComplete(allResults)
+			console.log('Analysis Results:', allResults)
+
 			// Get existing results and append new ones instead of replacing
 			const existingResults = localStorage.getItem('bloodTestResults')
 			const existingArray = existingResults ? JSON.parse(existingResults) : []
-			const updatedResults = [...existingArray, ...formattedResults]
+			const updatedResults = [...existingArray, ...allResults]
 			localStorage.setItem('bloodTestResults', JSON.stringify(updatedResults))
 
 			toast.success('Report analyzed successfully!')
