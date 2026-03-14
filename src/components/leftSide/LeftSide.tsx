@@ -68,7 +68,7 @@ const LeftSide = ({
 
 		setLoading(true)
 		try {
-			// Transform before sending
+			// Transform before sending but i can directly send tests in the axios
 			const payload = tests.map((t) => ({
 				testName: t.testName,
 				value: parseFloat(t.value), // convert string to number
