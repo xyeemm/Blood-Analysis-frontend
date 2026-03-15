@@ -1,4 +1,5 @@
-import axios from 'axios'
+import { bloodAnalysisActions } from '@/redux-toolkit/actions'
+import { useAppDispatch } from '@/redux-toolkit/store'
 import { motion } from 'framer-motion'
 import { ChevronDown, Plus, Trash2, TrendingUp } from 'lucide-react'
 import { useState } from 'react'
@@ -14,7 +15,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../ui/select'
-
 interface Test {
 	testName: string
 	value: string
@@ -31,9 +31,12 @@ const COMMON_TESTS = [
 	{ name: 'Cholesterol', unit: 'mg/dL' },
 ]
 
-const LeftSide = ({onAnalysisComplete,}: {onAnalysisComplete: (data: any[]) => void}) => {
+const LeftSide = () => {
+	const dispatch = useAppDispatch()
 	const [historyOpen, setHistoryOpen] = useState(false)
-	const [tests, setTests] = useState<Test[]>([{ testName: '', value: '', unit: '' },])
+	const [tests, setTests] = useState<Test[]>([
+		{ testName: '', value: '', unit: '' },
+	])
 	const [loading, setLoading] = useState(false)
 
 	const updateTest = (index: number, field: keyof Test, value: string) => {
@@ -55,44 +58,26 @@ const LeftSide = ({onAnalysisComplete,}: {onAnalysisComplete: (data: any[]) => v
 		e.preventDefault()
 
 		const hasEmpty = tests.some((t) => !t.testName || !t.value)
+
 		if (hasEmpty) {
 			toast.error('Please fill in all test names and values before analyzing')
 			return
 		}
 
 		setLoading(true)
+
 		try {
-			// Transform before sending but i can directly send tests in the axios
 			const payload = tests.map((t) => ({
 				testName: t.testName,
-				value: parseFloat(t.value), // convert string to number
+				value: t.value,
 				unit: t.unit,
 			}))
-			const response = await axios.post(
-				'http://localhost:5000/api/checkBloodTest',
-				payload,
-			)
-			console.log(response.data)
-			// Extracting results
-			const dataFromAPI = response.data.data
-			    // 🔹 Send it to parent
-    		onAnalysisComplete(Array.isArray(dataFromAPI) ? dataFromAPI : [dataFromAPI]);
 
-			// LOCAL STORAGE LOGIC
-			// Get existing results from localStorage
-			const existingResults = localStorage.getItem('bloodTestResults')
-			const existingArray = existingResults ? JSON.parse(existingResults) : []
-			// Append new results
-			const updatedResults = [...existingArray, ...dataFromAPI]
-
-			// Store back in localStorage
-			localStorage.setItem('bloodTestResults', JSON.stringify(updatedResults))
-
-			console.log('Stored in localStorage:', updatedResults)
-
+			const result = await dispatch(bloodAnalysisActions(payload)).unwrap()
+			console.log(result)
 			toast.success('Report analyzed successfully!')
-		} catch (err: any) {
-			toast.success("Report analyzed")
+		} catch (err) {
+			toast.error('Analysis failed')
 		} finally {
 			setLoading(false)
 		}

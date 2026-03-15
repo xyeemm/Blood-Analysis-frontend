@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/redux-toolkit/store'
 import { motion } from 'framer-motion'
 import { AlertTriangle } from 'lucide-react'
 import { Badge } from '../ui/badge'
@@ -12,33 +13,12 @@ const report = {
 		'Increase physical activity',
 		'Consider repeating glucose test in 2 weeks',
 	],
-	tests: [
-		{
-			name: 'Hemoglobin',
-			value: 14.2,
-			unit: 'g/dL',
-			normal: '13.5 - 17.5',
-			status: 'Normal',
-		},
-		{
-			name: 'Glucose',
-			value: 120,
-			unit: 'mg/dL',
-			normal: '70 - 99',
-			status: 'High',
-		},
-		{
-			name: 'White Blood Cells',
-			value: 6000,
-			unit: 'cells/mcL',
-			normal: '4000 - 11000',
-			status: 'Normal',
-		},
-	],
 }
 
-const RightSide = ({ results }: { results: any[] }) => {
-	// If no results yet, show a placeholder
+const RightSide = () => {
+	const results = useAppSelector((state) => state.analysis.results)
+
+	// If no results yet
 	if (results.length === 0) {
 		return (
 			<Card className='p-6 text-center text-slate-500'>
@@ -46,10 +26,12 @@ const RightSide = ({ results }: { results: any[] }) => {
 			</Card>
 		)
 	}
+
+	// latest report
+	const latestReport = results[results.length - 1]
+
 	return (
 		<div className='space-y-6'>
-			{/* Report Header */}
-
 			{/* Test Results */}
 			<Card className='p-6 shadow-md'>
 				<div className='flex justify-between items-center'>
@@ -57,22 +39,22 @@ const RightSide = ({ results }: { results: any[] }) => {
 						<h2 className='text-xl font-semibold text-slate-800'>
 							AI Blood Report Analysis
 						</h2>
-						{results.length > 0 && results[0].checkedAt && (
-							<p className='text-sm text-slate-500'>Generated on {new Date(results[0].checkedAt).toISOString().split('T')[0]}</p>
+
+						{latestReport.checkedAt && (
+							<p className='text-sm text-slate-500'>
+								Generated on{' '}
+								{new Date(latestReport.checkedAt).toISOString().split('T')[0]}
+							</p>
 						)}
 					</div>
-
-					{/* <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full text-sm">
-            <CheckCircle2 className="w-4 h-4" />
-            Stable
-          </div> */}
 				</div>
+
 				<h3 className='text-lg font-semibold text-slate-800 mb-4'>
 					Test Results
 				</h3>
 
 				<div className='space-y-4'>
-					{results.map((test, index) => (
+					{latestReport.data.map((test: any, index: number) => (
 						<motion.div
 							key={index}
 							initial={{ opacity: 0, y: 10 }}
@@ -81,6 +63,7 @@ const RightSide = ({ results }: { results: any[] }) => {
 						>
 							<div>
 								<p className='font-medium text-slate-700'>{test.testName}</p>
+
 								<p className='text-xs text-slate-500'>
 									Normal Range: {test.normalRange.min} - {test.normalRange.max}{' '}
 									{test.unit}
@@ -94,7 +77,7 @@ const RightSide = ({ results }: { results: any[] }) => {
 
 								<Badge
 									className={
-										test.status === 'Normal'
+										test.status === 'normal'
 											? 'bg-emerald-100 text-emerald-700'
 											: 'bg-amber-100 text-amber-700'
 									}
@@ -120,6 +103,7 @@ const RightSide = ({ results }: { results: any[] }) => {
 			<Card className='p-6 shadow-md'>
 				<div className='flex items-center gap-2 mb-3'>
 					<AlertTriangle className='w-5 h-5 text-amber-600' />
+
 					<h3 className='text-lg font-semibold text-slate-800'>
 						AI Suggestions
 					</h3>
