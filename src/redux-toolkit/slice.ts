@@ -38,7 +38,7 @@ const analysisSlice = createSlice({
 				const history = existing ? JSON.parse(existing) : []
 				localStorage.setItem(
 					'bloodTestResults',
-					JSON.stringify([...history, action.payload]),
+					JSON.stringify([action.payload, ...history]),
 				)
 			})
 
