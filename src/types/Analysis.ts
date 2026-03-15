@@ -7,7 +7,7 @@ export type TestStatus = 'normal' | 'low' | 'high'
 
 export interface BloodTestResult {
   testName: string
-  value: string
+  value: number
   unit: string
   isNormal: boolean
   status: TestStatus
