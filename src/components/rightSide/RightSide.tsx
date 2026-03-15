@@ -95,7 +95,7 @@ const RightSide = () => {
 				<h3 className='text-lg font-semibold text-slate-800 '>AI Summary</h3>
 
 				<p className='text-sm text-slate-600 leading-relaxed'>
-					{report.summary}
+					{latestReport.aiSummary}
 				</p>
 			</Card>
 
@@ -110,7 +110,7 @@ const RightSide = () => {
 				</div>
 
 				<ul className='space-y-2'>
-					{report.suggestions.map((s, i) => (
+					{latestReport.aiSuggestions.map((s, i) => (
 						<li
 							key={i}
 							className='p-3 rounded-lg bg-amber-50 text-sm text-amber-800 border border-amber-100'
