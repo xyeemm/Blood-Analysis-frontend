@@ -19,6 +19,8 @@ export interface BloodAnalysisResponse {
   success: boolean
   checkedAt: string
   data: BloodTestResult[]
+  aiSummary: string
+  aiSuggestions: string[]
 }
 
 export interface BloodTestPayloadItem {
