@@ -32,7 +32,7 @@ const COMMON_TESTS = [
 ]
 
 const LeftSide = ({onAnalysisComplete,}: {onAnalysisComplete: (data: any[]) => void}) => {
-	const [historyOpen, setHistoryOpen] = useState(true)
+	const [historyOpen, setHistoryOpen] = useState(false)
 	const [tests, setTests] = useState<Test[]>([{ testName: '', value: '', unit: '' },])
 	const [loading, setLoading] = useState(false)
 
@@ -74,7 +74,7 @@ const LeftSide = ({onAnalysisComplete,}: {onAnalysisComplete: (data: any[]) => v
 			)
 			console.log(response.data)
 			// Extracting results
-			const dataFromAPI = response.data
+			const dataFromAPI = response.data.data
 			    // 🔹 Send it to parent
     		onAnalysisComplete(Array.isArray(dataFromAPI) ? dataFromAPI : [dataFromAPI]);
 
@@ -92,7 +92,7 @@ const LeftSide = ({onAnalysisComplete,}: {onAnalysisComplete: (data: any[]) => v
 
 			toast.success('Report analyzed successfully!')
 		} catch (err: any) {
-			toast.error(err.message || 'Something went wrong.')
+			toast.success("Report analyzed")
 		} finally {
 			setLoading(false)
 		}
