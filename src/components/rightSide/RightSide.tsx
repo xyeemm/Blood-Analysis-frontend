@@ -65,8 +65,7 @@ const RightSide = () => {
 								<p className='font-medium text-slate-700'>{test.testName}</p>
 
 								<p className='text-xs text-slate-500'>
-									Normal Range: {test.normalRange.min} - {test.normalRange.max}{' '}
-									{test.unit}
+									Normal Range: {test.normalRange}{' '}
 								</p>
 							</div>
 

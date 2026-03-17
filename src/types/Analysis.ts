@@ -1,7 +1,7 @@
-interface NormalRange {
-  min: number
-  max: number
-}
+// interface NormalRange {
+//   min: number
+//   max: number
+// }
 
 export type TestStatus = 'normal' | 'low' | 'high'
 
@@ -11,7 +11,7 @@ export interface BloodTestResult {
   unit: string
   isNormal: boolean
   status: TestStatus
-  normalRange: NormalRange
+  normalRange: string
   message: string
 }
 
