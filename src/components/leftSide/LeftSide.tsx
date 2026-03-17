@@ -31,7 +31,7 @@ const COMMON_TESTS = [
 	{ name: 'Cholesterol', unit: 'mg/dL' },
 
 	{ name: 'Creatinine', unit: 'mg/dL' },
-	{ name: 'Urea(BUN)', unit: 'mg/dL' },
+	{ name: 'Urea', unit: 'mg/dL' },
 	{ name: 'Sodium', unit: 'mEq/L' },
 	{ name: 'Potassium', unit: 'mEq/L' },
 	{ name: 'Calcium', unit: 'mg/dL' },
@@ -319,8 +319,7 @@ const LeftSide = () => {
 												<div>
 													<span className='text-slate-600'>Normal: </span>
 													<span className='font-medium text-slate-800'>
-														{report.normalRange?.min} -{' '}
-														{report.normalRange?.max} {report.unit}
+														{report.normalRange} 
 													</span>
 												</div>
 											</div>
