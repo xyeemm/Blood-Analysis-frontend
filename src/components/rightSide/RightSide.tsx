@@ -4,16 +4,16 @@ import { AlertTriangle } from 'lucide-react'
 import { Badge } from '../ui/badge'
 import { Card } from '../ui/card'
 
-const report = {
-	date: '2024-02-12',
-	summary:
-		'Most parameters are within normal range. Slightly elevated glucose detected.',
-	suggestions: [
-		'Reduce sugar intake',
-		'Increase physical activity',
-		'Consider repeating glucose test in 2 weeks',
-	],
-}
+// const report = {
+// 	date: '2024-02-12',
+// 	summary:
+// 		'Most parameters are within normal range. Slightly elevated glucose detected.',
+// 	suggestions: [
+// 		'Reduce sugar intake',
+// 		'Increase physical activity',
+// 		'Consider repeating glucose test in 2 weeks',
+// 	],
+// }
 
 const RightSide = () => {
 	const results = useAppSelector((state) => state.analysis.results)
