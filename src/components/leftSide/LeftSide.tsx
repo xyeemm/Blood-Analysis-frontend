@@ -29,6 +29,17 @@ const COMMON_TESTS = [
 	{ name: 'Hematocrit', unit: '%' },
 	{ name: 'Glucose', unit: 'mg/dL' },
 	{ name: 'Cholesterol', unit: 'mg/dL' },
+
+	{ name: 'Creatinine', unit: 'mg/dL' },
+	{ name: 'Urea(BUN)', unit: 'mg/dL' },
+	{ name: 'Sodium', unit: 'mEq/L' },
+	{ name: 'Potassium', unit: 'mEq/L' },
+	{ name: 'Calcium', unit: 'mg/dL' },
+	{ name: 'Hdl', unit: 'mg/dL' },
+	{ name: 'Ldl', unit: 'mg/dL' },
+	{ name: 'Triglycerides', unit: 'mg/dL' },
+	
+
 ]
 
 const LeftSide = () => {
