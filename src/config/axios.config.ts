@@ -5,7 +5,7 @@ const baseUrl = () => {
 		return 'http://localhost:5000/api'
 	}
 
-	// return 'https://test-server-production-3f3f.up.railway.app/api/v1/'
+	return 'https://blood-analysis-backend-1.onrender.com/api'
 }
 
 const axiosInstance = axios.create({
