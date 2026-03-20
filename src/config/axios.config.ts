@@ -9,7 +9,7 @@ const baseUrl = () => {
 }
 
 const axiosInstance = axios.create({
-	baseURL: baseUrl(),
+  baseURL: import.meta.env.VITE_API_URL,
 	headers: {
 		Accept: 'application/json',
 	},
