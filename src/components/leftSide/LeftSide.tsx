@@ -38,8 +38,6 @@ const COMMON_TESTS = [
 	{ name: 'Hdl', unit: 'mg/dL' },
 	{ name: 'Ldl', unit: 'mg/dL' },
 	{ name: 'Triglycerides', unit: 'mg/dL' },
-	
-
 ]
 
 const LeftSide = () => {
@@ -120,10 +118,11 @@ const LeftSide = () => {
 								key={index}
 								initial={{ opacity: 0, x: -20 }}
 								animate={{ opacity: 1, x: 0 }}
-								className='grid grid-cols-1 md:grid-cols-12 gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200'
+								className='grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 p-4 rounded-lg border border-slate-200 dark:bg-gray-800 dark:border-gray-700  bg-gray-50 '
 							>
+								{/* Test Name */}
 								<div className='md:col-span-5'>
-									<Label className='text-sm text-slate-600 mb-1 block'>
+									<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
 										Test Name
 									</Label>
 									<Select
@@ -138,10 +137,7 @@ const LeftSide = () => {
 											}
 										}}
 									>
-										<SelectTrigger
-											className='bg-white border-slate-200 focus:border-emerald-500 rounded-lg'
-											data-testid={`test-name-input-${index}`}
-										>
+										<SelectTrigger className='w-full bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-700 focus:border-emerald-500 rounded-lg'>
 											<SelectValue placeholder='e.g., Hemoglobin' />
 										</SelectTrigger>
 										<SelectContent>
@@ -153,46 +149,52 @@ const LeftSide = () => {
 										</SelectContent>
 									</Select>
 								</div>
-								<div className='md:col-span-3'>
-									<Label className='text-sm text-slate-600 mb-1 block'>
-										Value
-									</Label>
-									<Input
-										type='number'
-										step='0.01'
-										placeholder='0.0'
-										value={test.value}
-										onChange={(e) => updateTest(index, 'value', e.target.value)}
-										className='bg-white border-slate-200 focus:border-emerald-500 rounded-lg'
-										data-testid={`test-value-input-${index}`}
-									/>
-								</div>
-								<div className='md:col-span-3'>
-									<Label className='text-sm text-slate-600 mb-1 block'>
-										Unit
-									</Label>
-									<Input
-										disabled
-										placeholder='unit'
-										value={test.unit}
-										onChange={(e) => updateTest(index, 'unit', e.target.value)}
-										className=' border-slate-200 w-32 focus:border-emerald-500 rounded-lg'
-										data-testid={`test-unit-input-${index}`}
-									/>
-								</div>
-								<div className='md:col-span-1 flex items-end'>
-									{tests.length > 1 && (
-										<Button
-											type='button'
-											variant='ghost'
-											size='icon'
-											onClick={() => removeTest(index)}
-											className='text-red-600 hover:bg-red-50'
-											data-testid={`remove-test-button-${index}`}
-										>
-											<Trash2 className='w-4 h-4' />
-										</Button>
-									)}
+
+								{/* Value + unit + deleteIcon in a single div*/}
+								<div className='grid grid-cols-3 gap-2 md:contents'>
+									{/* Value */}
+									<div className='col-span-1 md:col-span-3'>
+										<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
+											Value
+										</Label>
+										<Input
+											type='number'
+											step='0.01'
+											placeholder='0.0'
+											value={test.value}
+											onChange={(e) =>
+												updateTest(index, 'value', e.target.value)
+											}
+											className='w-full bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-700 focus:border-emerald-500 rounded-lg'
+										/>
+									</div>
+
+									{/* Unit */}
+									<div className='col-span-1 md:col-span-3'>
+										<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
+											Unit
+										</Label>
+										<Input
+											disabled
+											value={test.unit}
+											className='w-full bg-gray-100 dark:bg-gray-700 border-slate-200 dark:border-gray-700 rounded-lg'
+										/>
+									</div>
+
+									{/* Delete */}
+									<div className='flex items-end justify-end md:justify-center'>
+										{tests.length > 1 && (
+											<Button
+												type='button'
+												variant='ghost'
+												size='icon'
+												onClick={() => removeTest(index)}
+												className='text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20'
+											>
+												<Trash2 className='w-4 h-4' />
+											</Button>
+										)}
+									</div>
 								</div>
 							</motion.div>
 						))}
@@ -203,7 +205,7 @@ const LeftSide = () => {
 							type='button'
 							variant='outline'
 							onClick={addTest}
-							className='rounded-full border-emerald-200 hover:bg-emerald-50'
+							className='rounded-full border-emerald-200 hover:bg-emerald-50 dark:border-emerald-800 dark:hover:bg-emerald-900/20'
 							data-testid='add-test-button'
 						>
 							<Plus className='w-4 h-4 mr-2' />
@@ -239,10 +241,10 @@ const LeftSide = () => {
 					onClick={() => setHistoryOpen(!historyOpen)}
 				>
 					<div>
-						<h3 className='text-lg font-semibold text-slate-800'>
+						<h3 className='text-lg font-semibold text-slate-800 dark:text-gray-100'>
 							Report History
 						</h3>
-						<p className='text-sm text-slate-500'>
+						<p className='text-sm text-slate-500 dark:text-gray-400'>
 							View your past blood report analysis
 						</p>
 					</div>
@@ -260,7 +262,7 @@ const LeftSide = () => {
 									variant='outline'
 									size='sm'
 									onClick={clearHistory}
-									className='text-red-600 border-red-200 hover:bg-red-50'
+									className='text-red-600 dark:text-white border-red-200 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-900/20'
 								>
 									<Trash2 className='w-4 h-4 mr-2' />
 									Clear History
@@ -269,7 +271,7 @@ const LeftSide = () => {
 						)}
 
 						{storedResults.length === 0 ? (
-							<div className='p-4 bg-slate-50 rounded-lg border border-slate-200 text-center'>
+							<div className='p-4 bg-slate-50 rounded-lg border border-slate-200 dark:bg-gray-900 dark:border-gray-700 text-center'>
 								<p className='text-sm text-slate-500'>
 									No previous reports found
 								</p>
@@ -283,14 +285,14 @@ const LeftSide = () => {
 									{reportEntry.data.map((report: any, index: number) => (
 										<div
 											key={index}
-											className='p-4 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 cursor-pointer transition-colors'
+											className='p-4 bg-slate-50 rounded-lg border border-slate-200 dark:bg-gray-800 dark:border-gray-700  hover:bg-slate-100 dark:hover:bg-gray-800 cursor-pointer transition-colors'
 										>
 											<div className='flex justify-between items-start mb-2'>
 												<div>
-													<p className='text-sm font-medium text-slate-700'>
+													<p className='text-sm font-medium dark:text-gray-200'>
 														{report.testName}
 													</p>
-													<p className='text-xs text-slate-500'>
+													<p className='text-xs dark:text-gray-400'>
 														{reportEntry.checkedAt
 															? new Date(
 																	reportEntry.checkedAt,
@@ -301,8 +303,8 @@ const LeftSide = () => {
 												<span
 													className={`text-xs px-2 py-1 rounded-full ${
 														report.status === 'normal'
-															? 'bg-emerald-100 text-emerald-700'
-															: 'bg-amber-100 text-amber-700'
+															? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+															: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
 													}`}
 												>
 													{report.status}
@@ -311,15 +313,15 @@ const LeftSide = () => {
 
 											<div className='flex justify-between items-center mt-2 text-sm'>
 												<div>
-													<span className='text-slate-600'>Value: </span>
-													<span className='font-medium text-slate-800'>
+													<span className='dark:text-gray-400'>Value: </span>
+													<span className='font-medium dark:text-gray-100'>
 														{report.value} {report.unit}
 													</span>
 												</div>
 												<div>
 													<span className='text-slate-600'>Normal: </span>
-													<span className='font-medium text-slate-800'>
-														{report.normalRange} 
+													<span className='font-medium dark:text-gray-400'>
+														{report.normalRange}
 													</span>
 												</div>
 											</div>
