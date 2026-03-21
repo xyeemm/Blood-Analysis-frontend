@@ -1,6 +1,5 @@
 import { useAppSelector } from '@/redux-toolkit/store'
 import { motion } from 'framer-motion'
-import { AlertTriangle } from 'lucide-react'
 import { Badge } from '../ui/badge'
 import { Card } from '../ui/card'
 
@@ -116,10 +115,11 @@ const RightSide = () => {
 					{latestReport.aiSuggestions.map((s, i) => (
 						<li
 							key={i}
-className='p-3 rounded-lg 
+							className='p-3 rounded-lg 
 bg-amber-50 dark:bg-gray-800 
 text-sm text-amber-800 dark:text-gray-300 
-'					>
+'
+						>
 							{s}
 						</li>
 					))}
