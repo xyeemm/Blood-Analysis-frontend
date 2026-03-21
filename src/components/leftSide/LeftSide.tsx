@@ -118,10 +118,10 @@ const LeftSide = () => {
 								key={index}
 								initial={{ opacity: 0, x: -20 }}
 								animate={{ opacity: 1, x: 0 }}
-								className='grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 p-4 rounded-lg border border-slate-200 dark:bg-gray-800 dark:border-gray-700  bg-gray-50 '
+								className='grid grid-cols-6 md:grid-cols-12 gap-3 md:gap-4 p-4 rounded-lg border border-slate-200 dark:bg-gray-800 dark:border-gray-700  bg-gray-50 '
 							>
 								{/* Test Name */}
-								<div className='md:col-span-5'>
+								<div className='col-span-6 md:col-span-5'>
 									<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
 										Test Name
 									</Label>
@@ -151,9 +151,9 @@ const LeftSide = () => {
 								</div>
 
 								{/* Value + unit + deleteIcon in a single div*/}
-								<div className='grid grid-cols-3 gap-2 md:contents'>
+								{/* <div className='grid grid-cols-3 gap-2 md:contents'> */}
 									{/* Value */}
-									<div className='col-span-1 md:col-span-3'>
+									<div className='col-span-2 md:col-span-3'>
 										<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
 											Value
 										</Label>
@@ -170,7 +170,7 @@ const LeftSide = () => {
 									</div>
 
 									{/* Unit */}
-									<div className='col-span-1 md:col-span-3'>
+									<div className='col-span-2 md:col-span-3'>
 										<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
 											Unit
 										</Label>
@@ -182,7 +182,7 @@ const LeftSide = () => {
 									</div>
 
 									{/* Delete */}
-									<div className='flex items-end justify-end md:justify-center'>
+									<div className='col-span-2 md:col-span-1 flex justify-end md:justify-center items-end'>
 										{tests.length > 1 && (
 											<Button
 												type='button'
@@ -195,7 +195,7 @@ const LeftSide = () => {
 											</Button>
 										)}
 									</div>
-								</div>
+								{/* </div> */}
 							</motion.div>
 						))}
 					</div>
