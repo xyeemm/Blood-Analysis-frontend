@@ -137,8 +137,8 @@ const LeftSide = () => {
 											}
 										}}
 									>
-										<SelectTrigger className='w-full bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-700 focus:border-emerald-500 rounded-lg'>
-											<SelectValue placeholder='e.g., Hemoglobin' />
+										<SelectTrigger className='w-full bg-white dark:bg-gray-900  border-slate-200 dark:border-gray-700 focus:border-emerald-500 rounded-lg'>
+											<SelectValue placeholder='select test ...' />
 										</SelectTrigger>
 										<SelectContent>
 											{COMMON_TESTS.map((t) => (
@@ -152,49 +152,48 @@ const LeftSide = () => {
 
 								{/* Value + unit + deleteIcon in a single div*/}
 								{/* <div className='grid grid-cols-3 gap-2 md:contents'> */}
-									{/* Value */}
-									<div className='col-span-2 md:col-span-3'>
-										<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
-											Value
-										</Label>
-										<Input
-											type='number'
-											step='0.01'
-											placeholder='0.0'
-											value={test.value}
-											onChange={(e) =>
-												updateTest(index, 'value', e.target.value)
-											}
-											className='w-full bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-700 focus:border-emerald-500 rounded-lg'
-										/>
-									</div>
+								{/* Value */}
+								<div className='col-span-2 md:col-span-3'>
+									<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
+										Value
+									</Label>
+									<Input
+										type='number'
+										step='0.01'
+										placeholder='0.0'
+										value={test.value}
+										onChange={(e) => updateTest(index, 'value', e.target.value)}
+										className='w-full bg-white dark:bg-gray-900 border-slate-200 dark:border-gray-700 focus:border-emerald-500 rounded-lg'
+									/>
+								</div>
 
-									{/* Unit */}
-									<div className='col-span-2 md:col-span-3'>
-										<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
-											Unit
-										</Label>
-										<Input
-											disabled
-											value={test.unit}
-											className='w-full bg-gray-100 dark:bg-gray-700 border-slate-200 dark:border-gray-700 rounded-lg'
-										/>
-									</div>
+								{/* Unit */}
+								<div className='col-span-2 md:col-span-3'>
+									<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
+										Unit
+									</Label>
+									<Input
+										placeholder='unit'
+										disabled
+										value={test.unit}
+										className='w-full bg-gray-100 dark:bg-gray-700 border-slate-200 dark:border-gray-700 rounded-lg'
+									/>
+								</div>
 
-									{/* Delete */}
-									<div className='col-span-2 md:col-span-1 flex justify-end md:justify-center items-end'>
-										{tests.length > 1 && (
-											<Button
-												type='button'
-												variant='ghost'
-												size='icon'
-												onClick={() => removeTest(index)}
-												className='text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20'
-											>
-												<Trash2 className='w-4 h-4' />
-											</Button>
-										)}
-									</div>
+								{/* Delete */}
+								<div className='col-span-2 md:col-span-1 flex justify-end md:justify-center items-end'>
+									{tests.length > 1 && (
+										<Button
+											type='button'
+											variant='ghost'
+											size='icon'
+											onClick={() => removeTest(index)}
+											className='text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20'
+										>
+											<Trash2 className='w-4 h-4' />
+										</Button>
+									)}
+								</div>
 								{/* </div> */}
 							</motion.div>
 						))}
@@ -271,7 +270,7 @@ const LeftSide = () => {
 						)}
 
 						{storedResults.length === 0 ? (
-							<div className='p-4 bg-slate-50 rounded-lg border border-slate-200 dark:bg-gray-900 dark:border-gray-700 text-center'>
+							<div className='p-4 bg-slate-50 rounded-lg border border-slate-200 dark:bg-gray-800 dark:border-gray-700 text-center'>
 								<p className='text-sm text-slate-500'>
 									No previous reports found
 								</p>
