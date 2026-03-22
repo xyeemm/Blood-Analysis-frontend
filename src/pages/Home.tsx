@@ -13,7 +13,7 @@ const Home = () => {
 			<div className='hidden md:block w-px bg-gray-300 mx-4 dark:bg-gray-800'></div>
 
 			{/* Right Side: Results */}
-			<div className='flex-2 p-4'>
+			<div className='md:flex-1 lg:flex-2 p-4'>
 				<RightSide />
 			</div>
 		</div>
