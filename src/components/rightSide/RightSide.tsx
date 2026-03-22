@@ -1,6 +1,5 @@
 import { useAppSelector } from '@/redux-toolkit/store'
 import { motion } from 'framer-motion'
-import ReportHistoryCard from '../reportHistory/ReportHistoryCard'
 import { Badge } from '../ui/badge'
 import { Card } from '../ui/card'
 
@@ -126,9 +125,6 @@ text-sm text-amber-800 dark:text-gray-300
 					))}
 				</ul>
 			</Card>
-			<div className='block md:hidden'>
-				<ReportHistoryCard />
-			</div>
 		</div>
 	)
 }

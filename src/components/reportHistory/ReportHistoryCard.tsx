@@ -30,7 +30,7 @@ const ReportHistoryCard = () => {
 				onClick={() => setHistoryOpen(!historyOpen)}
 			>
 				<div>
-					<h3 className='text-lg font-semibold text-slate-800 dark:text-gray-100'>
+					<h3 className='text-lg font-semibold text-slate-800 dark:text-gray-300'>
 						Report History
 					</h3>
 					<p className='text-sm text-slate-500 dark:text-gray-400'>

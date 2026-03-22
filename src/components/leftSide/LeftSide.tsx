@@ -110,7 +110,7 @@ const LeftSide = () => {
 							>
 								{/* Test Name */}
 								<div className='col-span-6 md:col-span-5'>
-									<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
+									<Label className='text-sm text-slate-600 dark:text-gray-300 mb-1 block'>
 										Test Name
 									</Label>
 									<Select
@@ -142,7 +142,7 @@ const LeftSide = () => {
 								{/* <div className='grid grid-cols-3 gap-2 md:contents'> */}
 								{/* Value */}
 								<div className='col-span-2 md:col-span-3'>
-									<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
+									<Label className='text-sm text-slate-600 dark:text-gray-300 mb-1 block'>
 										Value
 									</Label>
 									<Input
@@ -157,7 +157,7 @@ const LeftSide = () => {
 
 								{/* Unit */}
 								<div className='col-span-2 md:col-span-3'>
-									<Label className='text-sm text-slate-600 dark:text-gray-400 mb-1 block'>
+									<Label className='text-sm text-slate-600 dark:text-gray-300 mb-1 block'>
 										Unit
 									</Label>
 									<Input

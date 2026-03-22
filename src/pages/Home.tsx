@@ -1,3 +1,4 @@
+import ReportHistoryCard from '@/components/reportHistory/ReportHistoryCard'
 import LeftSide from '../components/leftSide/LeftSide'
 import RightSide from '../components/rightSide/RightSide'
 
@@ -15,6 +16,9 @@ const Home = () => {
 			{/* Right Side: Results */}
 			<div className='md:flex-1 lg:flex-2 p-4'>
 				<RightSide />
+			</div>
+			<div className=' p-4 block md:hidden'>
+				<ReportHistoryCard />
 			</div>
 		</div>
 	)
