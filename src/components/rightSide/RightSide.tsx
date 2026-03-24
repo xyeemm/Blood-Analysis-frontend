@@ -20,7 +20,7 @@ const RightSide = () => {
 	// If no results yet
 	if (results.length === 0) {
 		return (
-			<Card className='p-6 text-center dark:text-gray-400'>
+			<Card className='p-6 lg:text-lg text-slate-700 text-center flex justify-center lg:h-64 dark:text-gray-400'>
 				Submit a test to see analysis
 			</Card>
 		)
