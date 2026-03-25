@@ -22,7 +22,7 @@ const Home = () => {
 							<span className='inline-flex items-center gap-2 justify-center'>
 								<GradientText
 									className='text-lg md:text-xl font-bold '
-									text='Powered by Ai'
+									text='Enchanted by Ai Alchemist'
 								/>
 
 								<img
