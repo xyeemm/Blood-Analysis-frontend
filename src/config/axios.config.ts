@@ -1,15 +1,15 @@
-import axios from "axios";
+import axios from 'axios'
 
-// const baseUrl = () => {
-// 	if (import.meta.env.MODE === 'development') {
-// 		return 'http://localhost:5000/api'
-// 	}
+const baseUrl = () => {
+	if (import.meta.env.MODE === 'development') {
+		return 'http://localhost:5000/api'
+	}
 
-// 	return 'https://blood-analysis-backend-1.onrender.com/api'
-// }
+	return 'https://blood-analysis-backend-1.onrender.com/api'
+}
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+	baseURL: baseUrl(),
 	headers: {
 		Accept: 'application/json',
 	},
