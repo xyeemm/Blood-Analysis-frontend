@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 
 const baseUrl = () => {
 	if (import.meta.env.MODE === 'development') {
@@ -9,7 +9,7 @@ const baseUrl = () => {
 }
 
 const axiosInstance = axios.create({
-	baseURL: baseUrl(),
+  baseURL: baseUrl(),
 	headers: {
 		Accept: 'application/json',
 	},
